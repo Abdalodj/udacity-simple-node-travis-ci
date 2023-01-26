@@ -11,12 +11,12 @@ jobs:
     steps:
       - checkout
       - run: docker --version # print the version for logging
-      - run: docker build -t simple-node .
-      - run: docker tag simple-node abdalodj/udacity-simple-node-exo:latest
+      - run: docker build -t udacity-simple-node-exo .
+      - run: docker tag udacity-simple-node-exo abdalodj/udacity-simple-node-exo:latest
 
   test:
     docker:
-      - image: cimg/node:13
+      - image: cimg/node:13.14.0
         auth:
           username: $DOCKER_USERNAME
           password: $DOCKER_PASSWORD  # context / project UI env-var reference
