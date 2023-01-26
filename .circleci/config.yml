@@ -1,0 +1,56 @@
+version: 2.1
+
+# Define the jobs we want to run for this project
+jobs:
+  build:
+    docker:
+      - image: abdalodj/udacity-simple-node-exo:latest
+        auth:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      - run: docker --version # print the version for logging
+      - run: docker build -t simple-node .
+      - run: docker tag simple-node YOUR_DOCKER_HUB/simple-node:latest
+
+  test:
+    docker:
+      - image: abdalodj/udacity-simple-node-exo:latest
+        auth:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      - run: echo "docker push abdalodj/simple-node"
+
+# Orchestrate our job run sequence
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test
+
+# language: node_js
+# node_js:
+#   - 13
+
+# services:
+#   - docker
+
+# # Pre-testing installs
+# install:
+#   - echo "nothing needs to be installed"
+
+# # Scripts to be run such as tests
+# before_script:
+#   - echo "no tests"
+
+# script:
+#   - docker --version # print the version for logging
+#   - docker build -t simple-node .
+#   - docker tag simple-node YOUR_DOCKER_HUB/simple-node:latest
+
+# after_success:
+#   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#   - docker push YOUR_DOCKER_HUB/simple-node
