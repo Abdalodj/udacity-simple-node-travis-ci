@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: abdalodj/udacity-simple-node-exo:latest
+      - image: cimg/node:13
         auth:
           username: $DOCKER_USERNAME
           password: $DOCKER_PASSWORD  # context / project UI env-var reference
@@ -12,24 +12,26 @@ jobs:
       - checkout
       - run: docker --version # print the version for logging
       - run: docker build -t simple-node .
-      - run: docker tag simple-node YOUR_DOCKER_HUB/simple-node:latest
+      - run: docker tag simple-node abdalodj/udacity-simple-node-exo:latest
 
   test:
     docker:
-      - image: abdalodj/udacity-simple-node-exo:latest
+      - image: cimg/node:13
         auth:
           username: $DOCKER_USERNAME
           password: $DOCKER_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
-      - run: echo "docker push abdalodj/simple-node"
+      - run: echo "docker push abdalodj/udacity-simple-node-exo"
 
 # Orchestrate our job run sequence
 workflows:
   build_and_test:
     jobs:
       - build
-      - test
+      - test:
+          requires:
+            - build
 
 # language: node_js
 # node_js:
