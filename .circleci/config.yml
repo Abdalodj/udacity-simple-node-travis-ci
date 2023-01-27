@@ -44,7 +44,7 @@ workflows:
       - publishLatestToHub
       - test:
           requires:
-            - build
+            - publishLatestToHub
 
 # language: node_js
 # node_js:
