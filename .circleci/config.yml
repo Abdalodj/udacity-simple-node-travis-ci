@@ -41,7 +41,7 @@ jobs:
 workflows:
   build_and_test:
     jobs:
-      - build
+      - publishLatestToHub
       - test:
           requires:
             - build
