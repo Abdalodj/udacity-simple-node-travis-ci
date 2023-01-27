@@ -1,19 +1,31 @@
+orbs:
+  docker: circleci/docker@1.5.0
 version: 2.1
+
+executors:
+  docker-publisher: 
+    environment:
+      IMAGE_NAME: abdalodj/udacity-simple-node-exo
+    docker: # Each job requires specifying an executor
+    # (either docker, macos, or machine), see
+      - image: circleci/node:13.14.0
+        auth:
+            username: $DOCKER_USERNAME
+            password: $DOCKER_PASSWORD
 
 # Define the jobs we want to run for this project
 jobs:
-  build:
-    working_directory: /app
-    docker:
-      - image: cimg/node:13.14.0
-        auth:
-          username: $DOCKER_USERNAME
-          password: $DOCKER_PASSWORD  # context / project UI env-var reference
+  publishLatestToHub:
+    executor: docker-publisher
     steps:
       - checkout
-      - run: docker --version # print the version for logging
-      - run: docker build -t udacity-simple-node-exo .
-      - run: docker tag udacity-simple-node-exo abdalodj/udacity-simple-node-exo:latest
+      - setup_remote_docker
+      - run: 
+          name: Publish Docker Image to Docker Hub
+          command: |
+            docker --version # print the version for logging
+            docker build -t udacity-simple-node-exo .
+            docker tag udacity-simple-node-exo abdalodj/udacity-simple-node-exo:latest
 
   test:
     docker:
